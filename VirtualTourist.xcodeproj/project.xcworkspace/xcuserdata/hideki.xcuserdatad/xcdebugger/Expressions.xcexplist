@@ -3,6 +3,14 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "PhotosViewController.viewDidLoad() -&gt; ():PhotosViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "navigationItem">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "TopViewController.loadLocations() -&gt; ():TopViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -17,6 +25,9 @@
                value = "view.annotation">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "TopViewController.loadStartupLocation() -&gt; ():TopViewController.swift">
       </ContextState>
    </ContextStates>
 </VariablesViewState>

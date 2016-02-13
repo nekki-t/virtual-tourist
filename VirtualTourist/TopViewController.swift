@@ -19,6 +19,7 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
     var manager: CLLocationManager!
     var annotations = [MKPointAnnotation]()
     var pins:[Pin]!
+    var dragAndDropped = false
     
     
     // MARK: SharedContext
@@ -52,6 +53,9 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         loadStartupLocation()
     }
     
+    override func viewWillAppear(animated: Bool) {
+        navigationItem.title = "Virtual Tourist"
+    }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
@@ -91,6 +95,7 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         pinView.animatesDrop = true
         pinView.annotation = annotation
         pinView.pinTintColor = UIColor.redColor()
+        pinView.sizeToFit()
         pinView.draggable = true
         
         return pinView
@@ -103,17 +108,26 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
     
     // pin tapped
     func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
+        guard let index = annotations.indexOf(view.annotation as! MKPointAnnotation) where index > -1 else {
+            return
+        }
+        
         if toDelete {
-            guard let index = annotations.indexOf(view.annotation as! MKPointAnnotation) where index > -1 else {
-                map.removeAnnotation(view.annotation!)
-                return
-            }
             deletePinData(index)
             map.removeAnnotation(view.annotation!)
         } else {
-            // move to photo view
+            if dragAndDropped {
+                dragAndDropped = false
+                return
+            }
+            let controller = storyboard!.instantiateViewControllerWithIdentifier("PhotosViewController") as! PhotosViewController
+            controller.region = map.region
+            controller.pin = pins[index]
+            navigationItem.title = "OK"
+            navigationController!.pushViewController(controller, animated: true)
         }
     }
+    
     
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, didChangeDragState newState: MKAnnotationViewDragState, fromOldState oldState: MKAnnotationViewDragState) {
         switch(newState){
@@ -125,8 +139,8 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
                 return
             }
             updatePinData(index, location: view.annotation!.coordinate)
+            dragAndDropped = true
             print("drag ended")
-            
         default:
             break
         }

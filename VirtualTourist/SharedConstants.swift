@@ -8,3 +8,7 @@
 
 import Foundation
 
+public struct SharedConstants {
+    
+}
+

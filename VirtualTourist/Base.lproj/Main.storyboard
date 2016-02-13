@@ -6,10 +6,10 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Virtual Tourist-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="VirtualTourist" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="TopViewController" customModule="VirtualTourist" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -18,24 +18,52 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="k4q-IR-zHq">
-                                <rect key="frame" x="20" y="64" width="560" height="536"/>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="o8u-M6-HR2">
+                                <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                            </mapView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jMa-by-Lz3">
+                                <rect key="frame" x="0.0" y="520" width="600" height="80"/>
                                 <subviews>
-                                    <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="o8u-M6-HR2">
-                                        <rect key="frame" x="0.0" y="0.0" width="560" height="536"/>
-                                    </mapView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap pins to Delete" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K94-LT-6nZ">
+                                        <rect key="frame" x="216" y="27" width="168" height="26"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
-                            </stackView>
+                                <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="80" id="52A-YS-qAw"/>
+                                    <constraint firstItem="K94-LT-6nZ" firstAttribute="centerY" secondItem="jMa-by-Lz3" secondAttribute="centerY" id="L33-o6-tav"/>
+                                    <constraint firstItem="K94-LT-6nZ" firstAttribute="centerX" secondItem="jMa-by-Lz3" secondAttribute="centerX" id="RTz-fO-vhd"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="k4q-IR-zHq" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="3WK-L2-MUl"/>
-                            <constraint firstItem="k4q-IR-zHq" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="lap-ib-xaB"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="k4q-IR-zHq" secondAttribute="trailing" id="r3A-yn-a1Z"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="k4q-IR-zHq" secondAttribute="bottom" id="syP-IK-ywH"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="o8u-M6-HR2" secondAttribute="trailing" constant="-20" id="15V-jG-vtW"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="jMa-by-Lz3" secondAttribute="trailing" constant="-20" id="YoK-ku-c2i"/>
+                            <constraint firstItem="o8u-M6-HR2" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="a8J-gA-U1r"/>
+                            <constraint firstItem="jMa-by-Lz3" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="bIC-v9-v4x"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="o8u-M6-HR2" secondAttribute="bottom" id="bpY-f5-BR2"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="jMa-by-Lz3" secondAttribute="bottom" id="okh-kr-cQA"/>
+                            <constraint firstItem="o8u-M6-HR2" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="rGi-KP-1LF"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="kuc-bE-DEs"/>
+                    <navigationItem key="navigationItem" title="Virtual Tourist" id="kuc-bE-DEs">
+                        <barButtonItem key="rightBarButtonItem" title="Edit" id="aWk-Wp-wgs">
+                            <connections>
+                                <action selector="editButtonTapped:" destination="BYZ-38-t0r" id="LKR-fn-M0s"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="bottomEditMessageHeight" destination="52A-YS-qAw" id="bUJ-CM-85e"/>
+                        <outlet property="bottomEditMessagePosY" destination="okh-kr-cQA" id="ceM-Nn-eZo"/>
+                        <outlet property="editButton" destination="aWk-Wp-wgs" id="f1i-f2-o9L"/>
+                        <outlet property="map" destination="o8u-M6-HR2" id="ssy-m1-PXr"/>
+                        <outlet property="mapPosY" destination="rGi-KP-1LF" id="u3J-g9-jEW"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>

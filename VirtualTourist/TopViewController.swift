@@ -57,25 +57,6 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         super.viewWillDisappear(animated)
     }
     
-    func loadStartupLocation() {
-        let userData = UserData.sharedInstance()
-        if userData.hasLastLocation{
-            map.setRegion(userData.lastRegion, animated:true)
-        }
-    }
-    func loadLocations() {
-        
-        pins = fetchedResultsController.fetchedObjects as! [Pin]
-        
-        for pin in  pins {
-            let cllc = CLLocationCoordinate2D(latitude: Double(pin.latitude), longitude: pin.longitude)
-            let annotation = MKPointAnnotation()
-            annotation.coordinate = cllc
-            annotation.title = String(pin.objectID)
-            annotations.append(annotation)
-            map.addAnnotation(annotation)
-        }
-    }
     
     // MARK: - IBActions
     @IBAction func editButtonTapped(sender: AnyObject) {
@@ -99,11 +80,6 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         }
     }
     
-    func mapViewDidFinishRenderingMap(mapView: MKMapView, fullyRendered: Bool) {
-        print("here")
-        UserData.sharedInstance().saveLastRegion(map.region)
-
-    }
     // MARK: - MapViewDelegate
     // putting pins on the map
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
@@ -120,13 +96,10 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         return pinView
     }
     
-    
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        print(manager.location?.coordinate.latitude)
-        print(manager.location?.coordinate.longitude)
-        
+    // Save Region
+    func mapViewDidFinishRenderingMap(mapView: MKMapView, fullyRendered: Bool) {
+        UserData.sharedInstance().saveLastRegion(map.region)
     }
-
     
     // pin tapped
     func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
@@ -138,11 +111,25 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
             deletePinData(index)
             map.removeAnnotation(view.annotation!)
         } else {
-            
+            // move to photo view
         }
     }
+    
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, didChangeDragState newState: MKAnnotationViewDragState, fromOldState oldState: MKAnnotationViewDragState) {
-        print(newState)
+        switch(newState){
+        case .Starting:
+            print("drag started") // Just to know the event started
+        case .Ending:
+            guard let index = annotations.indexOf(view.annotation as! MKPointAnnotation) where index > -1 else {
+                // nothing to do ... for safety coding
+                return
+            }
+            updatePinData(index, location: view.annotation!.coordinate)
+            print("drag ended")
+            
+        default:
+            break
+        }
     }
     
     // MARK: - Custom Actions
@@ -170,6 +157,28 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         bottomEditMessagePosY.constant -= bottomEditMessageHeight.constant
     }
     
+    // set map from saved region
+    func loadStartupLocation() {
+        let userData = UserData.sharedInstance()
+        if userData.hasLastLocation{
+            map.setRegion(userData.lastRegion, animated:true)
+        }
+    }
+    
+    // put all pins
+    func loadLocations() {
+        pins = fetchedResultsController.fetchedObjects as! [Pin]
+        
+        for pin in  pins {
+            let cllc = CLLocationCoordinate2D(latitude: Double(pin.latitude), longitude: pin.longitude)
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = cllc
+            annotation.title = String(pin.objectID)
+            annotations.append(annotation)
+            map.addAnnotation(annotation)
+        }
+    }
+    
     // MARK: - Core Data
     func insertNewPin(annotation: MKPointAnnotation, span: MKCoordinateSpan) {
         let dictionary: [String: AnyObject] = [
@@ -183,6 +192,13 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         pins.append(pin)
         annotations.append(annotation)
     }
+    func updatePinData(index: Int, location: CLLocationCoordinate2D) {
+        let pin = pins[index]
+        pin.latitude = location.latitude
+        pin.longitude = location.longitude
+        CoreDataStackManager.sharedInstance().saveContext()
+    }
+    
     func deletePinData(index: Int) {
         sharedContext.deleteObject(pins[index])
         pins.removeAtIndex(index)

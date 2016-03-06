@@ -10,11 +10,19 @@ import UIKit
 import CoreData
 import MapKit
 
-class PhotosViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, NSFetchedResultsControllerDelegate {
+class PhotosViewController: UIViewController, UICollectionViewDataSource, MKMapViewDelegate, UICollectionViewDelegate, NSFetchedResultsControllerDelegate {
+    
+    //###################################################################################
+    // MARK: - Constants
+    
 
+    //###################################################################################
+    // MARK: - IB Outlets
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var bottomButton: UIBarButtonItem!
+    @IBOutlet weak var map: MKMapView!
     
+    //###################################################################################
     // MARK: - Variables
     var region: MKCoordinateRegion!
     var pin: Pin!
@@ -22,9 +30,21 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
     // MARK: SharedContext
     var sharedContext = CoreDataStackManager.sharedInstance().managedObjectContext!
     
+    var loadPhotosObserver: NSObjectProtocol?
+    
+    //###################################################################################
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        dropPinOnMap()
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+    }
+    
+    
     
     // Layout the collection view
     override func viewDidLayoutSubviews() {
@@ -38,6 +58,36 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
         collectionView.collectionViewLayout = layout
     }
     
+    //###################################################################################
+    // MARK: - Observer Function
+    func registerLoadPhotosObserver() {
+//        loadPhotosObserver = NSNotificationCenter.defaultCenter().addObserverForName(
+//            SharedConstants.LoadPhotosObserver,
+//            object: <#T##AnyObject?#>, queue: <#T##NSOperationQueue?#>, usingBlock: <#T##(NSNotification) -> Void#>)
+    }
+    
+    
+    // MARK: - MapView Delegates
+    func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
+        
+        let reuseId = "pin"
+        var pinView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId) as? MKPinAnnotationView
+        pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+        pinView?.animatesDrop = true
+        
+        return pinView
+    }
+    
+    func dropPinOnMap() {
+        let point = MKPointAnnotation()
+        point.coordinate = CLLocationCoordinate2D()
+        point.coordinate.latitude = pin.latitude
+        point.coordinate.longitude = pin.longitude
+        map.addAnnotation(point)
+        map.showAnnotations([point], animated: true)
+    }
+    
+    //###################################################################################
     // MARK: - NSFetchedResultsController
     lazy var fetchedResultsController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: "Photo")
@@ -49,6 +99,7 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
         return fetchedResultsController
     }()
     
+    //###################################################################################
     // MARK: - UICollectionView
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return self.fetchedResultsController.sections?.count ?? 0
@@ -58,7 +109,8 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
         let sectionInfo = self.fetchedResultsController.sections![section]
         
         print("number Of Cells: \(sectionInfo.numberOfObjects)")
-        return sectionInfo.numberOfObjects
+        //return sectionInfo.numberOfObjects
+        return 24
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
@@ -82,5 +134,10 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
 //        updateBottomButton()
     }
 
-
+    //###################################################################################
+    // MARK: - Local Functions
+    func configureUI() {
+        map.delegate = self
+    }
+    
 }

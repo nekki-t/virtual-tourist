@@ -3,6 +3,31 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "TopViewController.(mapLongPressed(TopViewController) -&gt; (UILongPressGestureRecognizer) -&gt; ()).(closure #1):TopViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "FlickrClient.sharedInstance().flickrResponse">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "FlickrResponse.init(dictionary : NSDictionary) -&gt; FlickrResponse:FlickrResponse.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "dictionary[&quot;total&quot;]">
+            </PersistentString>
+            <PersistentString
+               value = "dictionary[DictionaryKeys.Total] as? Long">
+            </PersistentString>
+            <PersistentString
+               value = "dictionary[DictionaryKeys.Photo] as? NSDictionary">
+            </PersistentString>
+            <PersistentString
+               value = "total">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "PhotosViewController.viewDidLoad() -&gt; ():PhotosViewController.swift">
          <PersistentStrings>
             <PersistentString

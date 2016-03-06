@@ -12,19 +12,21 @@ import CoreData
 
 
 class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsControllerDelegate, CLLocationManagerDelegate {
+    //###################################################################################
     // MARK: - variables
     var toDelete = false
     var bottomEditMessageCurrentPosY:CGFloat = 0.0
+    var mapTap = UITapGestureRecognizer()
     var longTap = UILongPressGestureRecognizer()
     var manager: CLLocationManager!
     var annotations = [MKPointAnnotation]()
     var pins:[Pin]!
-    var dragAndDropped = false
     
-    
+    //###################################################################################
     // MARK: SharedContext
     var sharedContext = CoreDataStackManager.sharedInstance().managedObjectContext!
     
+    //###################################################################################
     // MARK: - IBOutlets
     @IBOutlet weak var map: MKMapView!
     @IBOutlet weak var editButton: UIBarButtonItem!
@@ -32,6 +34,7 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
     @IBOutlet weak var bottomEditMessagePosY: NSLayoutConstraint!
     @IBOutlet weak var mapPosY: NSLayoutConstraint!
     
+    //###################################################################################
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,7 +51,7 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
             print("Error performing initial fetch: \(error)")
         }
         
-        configureUI()
+                configureUI()
         loadLocations()
         loadStartupLocation()
     }
@@ -57,11 +60,7 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         navigationItem.title = "Virtual Tourist"
     }
     
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-    }
-    
-    
+    //###################################################################################
     // MARK: - IBActions
     @IBAction func editButtonTapped(sender: AnyObject) {
         if editButton.title == "Edit" {
@@ -84,6 +83,7 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         }
     }
     
+    //###################################################################################
     // MARK: - MapViewDelegate
     // putting pins on the map
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
@@ -106,28 +106,6 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         UserData.sharedInstance().saveLastRegion(map.region)
     }
     
-    // pin tapped
-    func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
-        guard let index = annotations.indexOf(view.annotation as! MKPointAnnotation) where index > -1 else {
-            return
-        }
-        
-        if toDelete {
-            deletePinData(index)
-            map.removeAnnotation(view.annotation!)
-        } else {
-            if dragAndDropped {
-                dragAndDropped = false
-                return
-            }
-            let controller = storyboard!.instantiateViewControllerWithIdentifier("PhotosViewController") as! PhotosViewController
-            controller.region = map.region
-            controller.pin = pins[index]
-            navigationItem.title = "OK"
-            navigationController!.pushViewController(controller, animated: true)
-        }
-    }
-    
     
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, didChangeDragState newState: MKAnnotationViewDragState, fromOldState oldState: MKAnnotationViewDragState) {
         switch(newState){
@@ -139,15 +117,17 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
                 return
             }
             updatePinData(index, location: view.annotation!.coordinate)
-            dragAndDropped = true
             print("drag ended")
         default:
             break
         }
     }
     
+    //###################################################################################
     // MARK: - Custom Actions
-    func longPressed (sender: UILongPressGestureRecognizer) {
+    
+    // Map
+    func mapLongPressed (sender: UILongPressGestureRecognizer) {
         if(sender.state != .Began) {
             return
         }
@@ -160,16 +140,69 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         insertNewPin(annotation,  span: map.region.span)
         
         map.addAnnotation(annotation)
+        
+        // TODO: Get Photos from API
+        FlickrClient.sharedInstance().getPhotosInfoByLocation(point.longitude, latitude: point.latitude, currentPage: 1){
+            success, error in
+            
+            if success {
+                for photoInfo in FlickrClient.sharedInstance().flickrResponse!.photos! {
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)){
+                        let downloadPhoto = UIImage(data: NSData(contentsOfURL: NSURL(string: photoInfo.urlM!)!)!)
+                        print("downloading...")
+                        dispatch_async(dispatch_get_main_queue(), {
+                            let photo = Photo()
+                            photo.photo = downloadPhoto
+                            print("downloaded")
+                        })
+                    }
+                }
+            } else {
+                
+            }
+        }
     }
     
+    //###################################################################################
     // MARK: - Local Functions
     func configureUI () {
+        
+        // setting up map
         map.delegate = self
-        longTap.addTarget(self, action: "longPressed:")
+        
+        longTap.addTarget(self, action: "mapLongPressed:")
         map.addGestureRecognizer(longTap)
         
+        // tap gesture
+        mapTap = UITapGestureRecognizer(target: self, action: "mapTapped:")
+        map.addGestureRecognizer(mapTap)
+        
+        
         bottomEditMessagePosY.constant -= bottomEditMessageHeight.constant
+
     }
+    
+    func mapTapped(gesture: UITapGestureRecognizer) {
+        let tapPoint: CGPoint = gesture.locationInView(map)
+        if let annotationView = map.hitTest(tapPoint, withEvent: nil) as? MKPinAnnotationView {
+            print("pintapped")
+            if let index = annotations.indexOf(annotationView.annotation as! MKPointAnnotation) {
+                if toDelete {
+                    if index > -1 {
+                        deletePinData(index)
+                    }
+                    map.removeAnnotation(annotationView.annotation!)
+                } else {
+                    let controller = storyboard!.instantiateViewControllerWithIdentifier("PhotosViewController") as! PhotosViewController
+                    controller.region = map.region
+                    controller.pin = pins[index]
+                    navigationItem.title = "OK"
+                    navigationController!.pushViewController(controller, animated: true)
+                }
+            }
+        }
+    }
+    
     
     // set map from saved region
     func loadStartupLocation() {
@@ -193,6 +226,7 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         }
     }
     
+    //###################################################################################
     // MARK: - Core Data
     func insertNewPin(annotation: MKPointAnnotation, span: MKCoordinateSpan) {
         let dictionary: [String: AnyObject] = [
@@ -206,6 +240,7 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         pins.append(pin)
         annotations.append(annotation)
     }
+    
     func updatePinData(index: Int, location: CLLocationCoordinate2D) {
         let pin = pins[index]
         pin.latitude = location.latitude
@@ -224,6 +259,7 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         }
     }
     
+    //###################################################################################
     // MARK: - NSFetchedResultsController
     lazy var fetchedResultsController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: "Pin")

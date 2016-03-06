@@ -17,6 +17,7 @@ class Pin: NSManagedObject {
         static let Latitude = "latitude"
     }
     
+    @NSManaged var id: NSNumber
     @NSManaged var longitude: Double
     @NSManaged var latitude: Double
     

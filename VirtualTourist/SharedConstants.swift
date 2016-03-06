@@ -9,6 +9,6 @@
 import Foundation
 
 public struct SharedConstants {
-    
+    static let LoadPhotosObserver = "loadPhotosObserver"
 }
 

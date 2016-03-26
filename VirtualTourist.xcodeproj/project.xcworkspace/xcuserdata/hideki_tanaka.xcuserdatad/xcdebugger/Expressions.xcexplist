@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "Photo.image.setter:Photo.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "photoPath">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "FlickrResponse.init(dictionary : NSDictionary) -&gt; FlickrResponse:FlickrResponse.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "dictionary[DictionaryKeys.Photo]">
+            </PersistentString>
+            <PersistentString
+               value = "page">
+            </PersistentString>
+            <PersistentString
+               value = "photos">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "FlickrPhoto.init(dictionary : [String : AnyObject]) -&gt; FlickrPhoto:FlickrPhoto.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "String(dictionary[DictionaryKeys.Id])">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "FlickrPhoto.getPhotoDictionary() -&gt; [String : AnyObject]:FlickrPhoto.swift">
+      </ContextState>
+      <ContextState
+         contextName = "TopViewController.(mapLongPressed(UILongPressGestureRecognizer) -&gt; ()).(closure #1):TopViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "FlickrClient.sharedInstance().flickrResponse!">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "TopViewController.(mapLongPressed(UILongPressGestureRecognizer) -&gt; ()).(closure #1).(closure #1).(closure #1):TopViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "photo.image">
+            </PersistentString>
+            <PersistentString
+               value = "photoPath">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "TopViewController.(mapLongPressed(UILongPressGestureRecognizer) -&gt; ()).(closure #1).(closure #1):TopViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "photoInfo.urlM!">
+            </PersistentString>
+            <PersistentString
+               value = " NSURL(string: photoInfo.urlM!)!">
+            </PersistentString>
+            <PersistentString
+               value = "UIImage(data: NSData(contentsOfURL: url)!">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>

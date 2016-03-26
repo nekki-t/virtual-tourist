@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		434B97991CA5222B006BB02B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 434B97981CA5222B006BB02B /* Assets.xcassets */; };
 		B84F92C91C8785020042F886 /* FlickrResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84F92C81C8785020042F886 /* FlickrResponse.swift */; };
 		B84F92CB1C87865E0042F886 /* FlickrPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84F92CA1C87865E0042F886 /* FlickrPhoto.swift */; };
 		B856D8BC1C82D65E000358D0 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = B856D8BB1C82D65E000358D0 /* ImageCache.swift */; };
@@ -21,7 +22,6 @@
 		B8AA4C0C1C8C205E00065227 /* SharedFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8AA4C0B1C8C205E00065227 /* SharedFunctions.swift */; };
 		B8B750D01C6DE0CF00DB3F1D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B750CF1C6DE0CF00DB3F1D /* AppDelegate.swift */; };
 		B8B750D51C6DE0CF00DB3F1D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B8B750D31C6DE0CF00DB3F1D /* Main.storyboard */; };
-		B8B750D71C6DE0CF00DB3F1D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B8B750D61C6DE0CF00DB3F1D /* Assets.xcassets */; };
 		B8B750DA1C6DE0CF00DB3F1D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B8B750D81C6DE0CF00DB3F1D /* LaunchScreen.storyboard */; };
 		B8B750E31C6DE3B700DB3F1D /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B8B750E11C6DE3B700DB3F1D /* Model.xcdatamodeld */; };
 		B8B750E51C6DE6AF00DB3F1D /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B8B750E41C6DE6AF00DB3F1D /* CoreLocation.framework */; };
@@ -31,6 +31,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		434B97981CA5222B006BB02B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B84F92C81C8785020042F886 /* FlickrResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlickrResponse.swift; sourceTree = "<group>"; };
 		B84F92CA1C87865E0042F886 /* FlickrPhoto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlickrPhoto.swift; sourceTree = "<group>"; };
 		B856D8BB1C82D65E000358D0 /* ImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
@@ -46,7 +47,6 @@
 		B8B750CC1C6DE0CF00DB3F1D /* VirtualTourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualTourist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8B750CF1C6DE0CF00DB3F1D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B8B750D41C6DE0CF00DB3F1D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		B8B750D61C6DE0CF00DB3F1D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B8B750D91C6DE0CF00DB3F1D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B8B750DB1C6DE0CF00DB3F1D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B8B750E21C6DE3B700DB3F1D /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
@@ -115,9 +115,9 @@
 				B8A119C01C6F1E86009B02A5 /* View */,
 				B8B750EB1C6DE8BD00DB3F1D /* Model */,
 				B8B750EA1C6DE8B300DB3F1D /* Controller */,
-				B8B750D61C6DE0CF00DB3F1D /* Assets.xcassets */,
 				B8B750D81C6DE0CF00DB3F1D /* LaunchScreen.storyboard */,
 				B8B750DB1C6DE0CF00DB3F1D /* Info.plist */,
+				434B97981CA5222B006BB02B /* Assets.xcassets */,
 			);
 			path = VirtualTourist;
 			sourceTree = "<group>";
@@ -205,7 +205,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B8B750DA1C6DE0CF00DB3F1D /* LaunchScreen.storyboard in Resources */,
-				B8B750D71C6DE0CF00DB3F1D /* Assets.xcassets in Resources */,
+				434B97991CA5222B006BB02B /* Assets.xcassets in Resources */,
 				B8B750D51C6DE0CF00DB3F1D /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

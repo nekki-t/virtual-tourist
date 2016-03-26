@@ -137,7 +137,7 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         
         let annotation = MKPointAnnotation()
         annotation.coordinate = point
-        insertNewPin(annotation,  span: map.region.span)
+        let newPin = insertNewPin(annotation,  span: map.region.span)
         
         map.addAnnotation(annotation)
         
@@ -146,14 +146,18 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
             success, error in
             
             if success {
-                for photoInfo in FlickrClient.sharedInstance().flickrResponse!.photos! {
+                for photoInfo in FlickrClient.sharedInstance().flickrResponse!.photos {
                     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)){
-                        let downloadPhoto = UIImage(data: NSData(contentsOfURL: NSURL(string: photoInfo.urlM!)!)!)
+                        let url = NSURL(string: photoInfo.urlM!)!
+                        print(url)
+                        let downloadPhoto = UIImage(data: NSData(contentsOfURL: url)!)
                         print("downloading...")
                         dispatch_async(dispatch_get_main_queue(), {
-                            let photo = Photo()
-                            photo.photo = downloadPhoto
+                            let photo = Photo(dictionary: photoInfo.getPhotoDictionary(), context: self.sharedContext)
+                            photo.image = downloadPhoto
+                            photo.pin = newPin
                             print("downloaded")
+                            CoreDataStackManager.sharedInstance().saveContext()
                         })
                     }
                 }
@@ -170,11 +174,11 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         // setting up map
         map.delegate = self
         
-        longTap.addTarget(self, action: "mapLongPressed:")
+        longTap.addTarget(self, action: #selector(mapLongPressed))
         map.addGestureRecognizer(longTap)
         
         // tap gesture
-        mapTap = UITapGestureRecognizer(target: self, action: "mapTapped:")
+        mapTap = UITapGestureRecognizer(target: self, action: #selector(mapTapped))
         map.addGestureRecognizer(mapTap)
         
         
@@ -228,7 +232,7 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
     
     //###################################################################################
     // MARK: - Core Data
-    func insertNewPin(annotation: MKPointAnnotation, span: MKCoordinateSpan) {
+    func insertNewPin(annotation: MKPointAnnotation, span: MKCoordinateSpan) -> Pin{
         let dictionary: [String: AnyObject] = [
             Pin.Keys.Latitude : annotation.coordinate.latitude,
             Pin.Keys.Longitude : annotation.coordinate.longitude
@@ -239,6 +243,7 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         CoreDataStackManager.sharedInstance().saveContext()
         pins.append(pin)
         annotations.append(annotation)
+        return pin
     }
     
     func updatePinData(index: Int, location: CLLocationCoordinate2D) {

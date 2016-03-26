@@ -10,7 +10,7 @@ import Foundation
 struct FlickrPhoto {
     
     var photo: String?
-    var id: NSNumber?
+    var id: String?
     var title: String?
     var urlM: String?
     var heightM: Int?
@@ -24,7 +24,7 @@ struct FlickrPhoto {
             photo = inPhoto
         }
         
-        if let inId = dictionary[DictionaryKeys.Id] as? Int {
+        if let inId = dictionary[DictionaryKeys.Id] as? String {
             id = inId
         }
         
@@ -43,6 +43,14 @@ struct FlickrPhoto {
         if let inWidthM = dictionary[DictionaryKeys.WidthM] as? Int {
             widthM = inWidthM
         }
+    }
+    
+    func getPhotoDictionary() -> [String: AnyObject]{
+        return [
+            Photo.Keys.IdString: id!,
+            Photo.Keys.Title: title!,
+            Photo.Keys.PhotoPath: urlM!
+        ]
     }
     
     struct DictionaryKeys {

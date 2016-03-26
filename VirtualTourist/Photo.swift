@@ -11,14 +11,15 @@ import CoreData
 
 class Photo: NSManagedObject {
     struct Keys {
-        static let Id = "id"
+        static let IdString = "idString"
         static let PhotoPath = "photo_path"
         static let Title = "title"
     }
     
-    @NSManaged var id: NSNumber
+    @NSManaged var idString: String
     @NSManaged var photoPath: String?
     @NSManaged var title: String?
+    @NSManaged var pin: Pin
     
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
@@ -30,20 +31,19 @@ class Photo: NSManagedObject {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
         
         // Dictionary
-        id = dictionary[Keys.Id] as! Int
+        idString = dictionary[Keys.IdString] as! String
         title = dictionary[Keys.Title] as? String
         photoPath = dictionary[Keys.PhotoPath] as? String
         
     }
     
-    var photo: UIImage? {
+    var image: UIImage? {
         get {
             return FlickrClient.Caches.imageCache.imageWithIdentifier(photoPath)
         }
         
         set {
-           FlickrClient.Caches.imageCache.storeImage(photo, withIdentifier: photoPath!)
+           FlickrClient.Caches.imageCache.storeImage(image, withIdentifier: photoPath!)
         }
     }
-    
 }

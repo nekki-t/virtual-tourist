@@ -9,17 +9,17 @@
 import Foundation
 struct FlickrResponse {
     
-    var total: Int?
-    var page: Int?
-    var pages: Int?
-    var perPage: Int?
-    var photos: [FlickrPhoto]?
+    var total = 0
+    var page = 0
+    var pages = 0
+    var perPage = 0
+    var photos = [FlickrPhoto]()
     
     init(){}
     
     init(dictionary: NSDictionary){
         if let inTotal = dictionary[DictionaryKeys.Total] as? String {
-            total = Int(inTotal)
+            total = Int(inTotal)!
         }
         
         if let inPage = dictionary[DictionaryKeys.Page] as? Int {
@@ -36,12 +36,11 @@ struct FlickrResponse {
         
         if let inPhotos = dictionary[DictionaryKeys.Photo] as? [[String: AnyObject]] {
             for photo in inPhotos {
-                print(photo)
+                //print(photo)
                 let newPhoto = FlickrPhoto(dictionary: photo)
-                photos?.append(newPhoto)
+                photos.append(newPhoto)
             }
         }
-        
     }
     
     struct DictionaryKeys {

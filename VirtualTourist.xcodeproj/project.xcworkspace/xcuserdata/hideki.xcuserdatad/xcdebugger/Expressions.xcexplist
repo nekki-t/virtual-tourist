@@ -3,6 +3,34 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "PhotoCell.photo.didset:PhotoCell.swift">
+      </ContextState>
+      <ContextState
+         contextName = "PhotosViewController.numberOfSectionsInCollectionView(UICollectionView) -&gt; Int:PhotosViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.fetchedResultsController.sections">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "Photo.image.getter:Photo.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "uniquePhotoId">
+            </PersistentString>
+            <PersistentString
+               value = " FlickrClient.Caches.imageCache.imageWithIdentifier(uniquePhotoId)">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "TopViewController.(mapLongPressed(UILongPressGestureRecognizer) -&gt; ()).(closure #1).(closure #1):TopViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "ImageCache.storeImage(UIImage?, withIdentifier : String) -&gt; ():ImageCache.swift">
+      </ContextState>
+      <ContextState
          contextName = "TopViewController.(mapLongPressed(TopViewController) -&gt; (UILongPressGestureRecognizer) -&gt; ()).(closure #1):TopViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -28,6 +56,23 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "Photo.image.setter:Photo.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "photoPath">
+            </PersistentString>
+            <PersistentString
+               value = "idString">
+            </PersistentString>
+            <PersistentString
+               value = "image">
+            </PersistentString>
+            <PersistentString
+               value = "self.image">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "PhotosViewController.viewDidLoad() -&gt; ():PhotosViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -36,18 +81,18 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "TopViewController.loadLocations() -&gt; ():TopViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "pins">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
          contextName = "TopViewController.mapView(MKMapView, didSelectAnnotationView : MKAnnotationView) -&gt; ():TopViewController.swift">
          <PersistentStrings>
             <PersistentString
                value = "view.annotation">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "TopViewController.loadLocations() -&gt; ():TopViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "pins">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

@@ -36,11 +36,24 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, MKMapV
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        dropPinOnMap()
+        
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        
+        dropPinOnMap()
+        
+        var error: NSError?
+        do{
+            try fetchedResultsController.performFetch()
+        } catch let err as NSError {
+            error = err
+        }
+        
+        if let error = error {
+            print("Error performing initial fetch: \(error)")
+        }
         
     }
     
@@ -109,19 +122,18 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, MKMapV
         let sectionInfo = self.fetchedResultsController.sections![section]
         
         print("number Of Cells: \(sectionInfo.numberOfObjects)")
-        //return sectionInfo.numberOfObjects
-        return 24
+        return sectionInfo.numberOfObjects
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell =  collectionView.dequeueReusableCellWithReuseIdentifier("PhotoCell", forIndexPath: indexPath) as! PhotoCell
-        //self.configureCell(cell, atIndexPath: indexPath)
+        self.configureCell(cell, atIndexPath: indexPath)
         
         return cell
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-//        let cell = collectionView.cellForItemAtIndexPath(indexPath) as! ColorCell
+//        let cell = collectionView.cellForItemAtIndexPath(indexPath) as! PhotoCell
 //        
 //        if let index = selectedIndexes.indexOf(indexPath) {
 //            selectedIndexes.removeAtIndex(index)
@@ -131,7 +143,7 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, MKMapV
 //        
 //        configureCell(cell, atIndexPath: indexPath)
 //        
-//        updateBottomButton()
+       // updateBottomButton()
     }
 
     //###################################################################################
@@ -140,4 +152,17 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, MKMapV
         map.delegate = self
     }
     
+    // MARK: - Configure Cell
+    func configureCell(cell: PhotoCell, atIndexPath indexPath: NSIndexPath) {
+        let photo = self.fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
+        
+        cell.photo = photo
+        
+//        if let _ = selectedIndexes.indexOf(indexPath) {
+//            cell.colorPanel.alpha = 0.05
+//        } else {
+//            cell.colorPanel.alpha = 1.0
+//        }
+    }
+
 }

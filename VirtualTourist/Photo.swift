@@ -16,6 +16,7 @@ class Photo: NSManagedObject {
         static let Title = "title"
     }
     
+    @NSManaged var uniquePhotoId: String
     @NSManaged var idString: String
     @NSManaged var photoPath: String?
     @NSManaged var title: String?
@@ -35,15 +36,16 @@ class Photo: NSManagedObject {
         title = dictionary[Keys.Title] as? String
         photoPath = dictionary[Keys.PhotoPath] as? String
         
+        
     }
     
     var image: UIImage? {
         get {
-            return FlickrClient.Caches.imageCache.imageWithIdentifier(photoPath)
+            return FlickrClient.Caches.imageCache.imageWithIdentifier(idString)
         }
         
         set {
-           FlickrClient.Caches.imageCache.storeImage(image, withIdentifier: photoPath!)
+           FlickrClient.Caches.imageCache.storeImage(newValue, withIdentifier: idString)
         }
     }
 }

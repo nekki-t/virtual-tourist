@@ -147,24 +147,41 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
             
             if success {
                 for photoInfo in FlickrClient.sharedInstance().flickrResponse!.photos {
-                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)){
-                        let url = NSURL(string: photoInfo.urlM!)!
-                        print(url)
-                        let downloadPhoto = UIImage(data: NSData(contentsOfURL: url)!)
-                        print("downloading...")
-                        dispatch_async(dispatch_get_main_queue(), {
+                    
+                    let url = NSURL(string: photoInfo.urlM!)!
+                    print("Download Started")
+                    print("lastPathComponent: " + (url.lastPathComponent ?? ""))
+                    self.getDataFromUrl(url) { (data, response, err)  in
+                        dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                            guard let data = data where err == nil else { return }
+                            print(response?.suggestedFilename ?? "")
+                            print("Download Finished")
                             let photo = Photo(dictionary: photoInfo.getPhotoDictionary(), context: self.sharedContext)
-                            photo.image = downloadPhoto
+                            photo.image = UIImage(data: data)
                             photo.pin = newPin
-                            print("downloaded")
                             CoreDataStackManager.sharedInstance().saveContext()
-                        })
+                        }
                     }
+
+                    
+//                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)){
+//                        print(url)
+//                        let downloadPhoto = UIImage(data: NSData(contentsOfURL: url)!)
+//                        print("downloading...")
+//                        dispatch_async(dispatch_get_main_queue(), {
+//                            
+//                        })
+//                    }
                 }
             } else {
                 
             }
         }
+    }
+    func getDataFromUrl(url:NSURL, completion: ((data: NSData?, response: NSURLResponse?, error: NSError? ) -> Void)) {
+        NSURLSession.sharedSession().dataTaskWithURL(url) { (data, response, error) in
+            completion(data: data, response: response, error: error)
+            }.resume()
     }
     
     //###################################################################################

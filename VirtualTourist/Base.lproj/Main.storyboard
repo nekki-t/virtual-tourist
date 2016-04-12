@@ -106,18 +106,18 @@
                                             <rect key="frame" x="0.0" y="0.0" width="168" height="151"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="eDD-km-NQm">
-                                                    <rect key="frame" x="9" y="9" width="150" height="133"/>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eDD-km-NQm">
+                                                    <rect key="frame" x="1" y="1" width="166" height="149"/>
                                                 </imageView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
-                                        <color key="backgroundColor" red="0.60000002379999995" green="0.60000002379999995" blue="0.60000002379999995" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="backgroundColor" red="0.1843137255" green="0.36862745099999999" blue="0.61960784310000006" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
-                                            <constraint firstItem="eDD-km-NQm" firstAttribute="top" secondItem="797-Cl-77J" secondAttribute="topMargin" constant="1" id="0zS-7E-X3I"/>
-                                            <constraint firstAttribute="bottomMargin" secondItem="eDD-km-NQm" secondAttribute="bottom" constant="1" id="1NA-xo-fI1"/>
-                                            <constraint firstAttribute="trailingMargin" secondItem="eDD-km-NQm" secondAttribute="trailing" constant="1" id="6wC-zf-v9e"/>
-                                            <constraint firstItem="eDD-km-NQm" firstAttribute="leading" secondItem="797-Cl-77J" secondAttribute="leadingMargin" constant="1" id="x8c-qD-oBn"/>
+                                            <constraint firstAttribute="trailingMargin" secondItem="eDD-km-NQm" secondAttribute="trailing" constant="-7" id="GlJ-D6-LgU"/>
+                                            <constraint firstItem="eDD-km-NQm" firstAttribute="leading" secondItem="797-Cl-77J" secondAttribute="leadingMargin" constant="-7" id="O8L-oZ-r42"/>
+                                            <constraint firstAttribute="bottomMargin" secondItem="eDD-km-NQm" secondAttribute="bottom" constant="-7" id="Wht-Hh-MMJ"/>
+                                            <constraint firstItem="eDD-km-NQm" firstAttribute="top" secondItem="797-Cl-77J" secondAttribute="topMargin" constant="-7" id="vhe-se-Y6K"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="photoImage" destination="eDD-km-NQm" id="Kv3-iL-jGm"/>
@@ -129,7 +129,7 @@
                                     <outlet property="delegate" destination="zxM-qx-fQt" id="GIN-Cr-tbK"/>
                                 </connections>
                             </collectionView>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="LsW-6S-wLv">
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" zoomEnabled="NO" scrollEnabled="NO" rotateEnabled="NO" pitchEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LsW-6S-wLv">
                                 <rect key="frame" x="0.0" y="64" width="600" height="150"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="150" id="rjk-zY-7Ti"/>

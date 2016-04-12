@@ -13,11 +13,13 @@ import MapKit
 class Pin: NSManagedObject {
     
     struct Keys {
+        static let AnnotationIndex = "annotationIndex"
         static let Longitude = "longitude"
         static let Latitude = "latitude"
     }
     
     @NSManaged var id: NSNumber
+    @NSManaged var annotationIndex: Int
     @NSManaged var longitude: Double
     @NSManaged var latitude: Double
     @NSManaged var Photos: [Photo]
@@ -33,6 +35,7 @@ class Pin: NSManagedObject {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
         
         // Dictionary
+        annotationIndex = dictionary[Keys.AnnotationIndex] as! Int
         longitude = dictionary[Keys.Longitude] as! Double
         latitude = dictionary[Keys.Latitude] as! Double
     }   

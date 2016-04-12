@@ -51,7 +51,7 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
             print("Error performing initial fetch: \(error)")
         }
         
-                configureUI()
+        configureUI()
         loadLocations()
         loadStartupLocation()
     }
@@ -154,8 +154,8 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
                     self.getDataFromUrl(url) { (data, response, err)  in
                         dispatch_async(dispatch_get_main_queue()) { () -> Void in
                             guard let data = data where err == nil else { return }
-                            print(response?.suggestedFilename ?? "")
-                            print("Download Finished")
+                            //print(response?.suggestedFilename ?? "")
+                            //print("Download Finished")
                             let photo = Photo(dictionary: photoInfo.getPhotoDictionary(), context: self.sharedContext)
                             photo.image = UIImage(data: data)
                             photo.pin = newPin
@@ -208,6 +208,7 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         if let annotationView = map.hitTest(tapPoint, withEvent: nil) as? MKPinAnnotationView {
             print("pintapped")
             if let index = annotations.indexOf(annotationView.annotation as! MKPointAnnotation) {
+                print("#####>>>>>> tapped index = \(index)")
                 if toDelete {
                     if index > -1 {
                         deletePinData(index)
@@ -217,6 +218,7 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
                     let controller = storyboard!.instantiateViewControllerWithIdentifier("PhotosViewController") as! PhotosViewController
                     controller.region = map.region
                     controller.pin = pins[index]
+                    //print(controller.pin)
                     navigationItem.title = "OK"
                     navigationController!.pushViewController(controller, animated: true)
                 }
@@ -250,7 +252,11 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
     //###################################################################################
     // MARK: - Core Data
     func insertNewPin(annotation: MKPointAnnotation, span: MKCoordinateSpan) -> Pin{
+        
+        let index = pins.count
+
         let dictionary: [String: AnyObject] = [
+            Pin.Keys.AnnotationIndex: index,
             Pin.Keys.Latitude : annotation.coordinate.latitude,
             Pin.Keys.Longitude : annotation.coordinate.longitude
         ]
@@ -260,6 +266,8 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         CoreDataStackManager.sharedInstance().saveContext()
         pins.append(pin)
         annotations.append(annotation)
+        
+        print("!!!!!!!!!!!!!!!! inserted index: \(index)")
         return pin
     }
     

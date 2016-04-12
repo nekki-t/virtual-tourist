@@ -8,20 +8,52 @@
 
 import UIKit
 
+
+
 class PhotoCell: UICollectionViewCell {
     
-    @IBOutlet weak var photoImage: UIImageView!
-    
-    var photo: Photo? {
+    // MARK: - Variables
+    var loadIndicator: UIActivityIndicatorView?
+    var photo: Photo?{
         didSet{
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+            showIndicator()
+            dispatch_async(dispatch_get_main_queue()) {
+                //dispatch_async(dispatch_get_main_queue()){
                 if let p = self.photo {
+                    
                     if let image = p.image {
                         self.photoImage.image = image
                         self.backgroundColor = UIColor.whiteColor()
+                        self.hideIndicator()
                     }
                 }
             }
+        }
+    }
+    
+    // MARK: - IBOutlet
+    @IBOutlet weak var photoImage: UIImageView!
+    
+    
+    
+    
+    func showIndicator() {
+        self.loadIndicator = UIActivityIndicatorView(frame: CGRectMake(0, 0, self.bounds.width, self.bounds.height))
+        self.loadIndicator?.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.WhiteLarge
+        if let loading = self.loadIndicator {
+            loading.backgroundColor = UIColor(white: 0.5, alpha: 0.5)
+            loading.color = UIColor.blackColor()
+            self.userInteractionEnabled = false
+            self.addSubview(loading)
+            loading.startAnimating()
+        }
+    }
+    
+    func hideIndicator() {
+        if let loading = self.loadIndicator {
+            loading.removeFromSuperview()
+            self.userInteractionEnabled = true
+            self.loadIndicator = nil
         }
     }
 }

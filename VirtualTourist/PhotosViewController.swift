@@ -36,6 +36,17 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, MKMapV
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        var error: NSError?
+
+        do{
+            try fetchedResultsController.performFetch()
+        } catch let err as NSError {
+            error = err
+        }
+
+        print("COUNT: ===>>>")
+        print(fetchedResultsController.sections![0].numberOfObjects)
+
         
     }
     
@@ -54,6 +65,9 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, MKMapV
         if let error = error {
             print("Error performing initial fetch: \(error)")
         }
+        
+        
+        collectionView.reloadData()
         
     }
     
@@ -105,6 +119,9 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, MKMapV
     lazy var fetchedResultsController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: "Photo")
         fetchRequest.sortDescriptors = []
+        fetchRequest.predicate = NSPredicate(format: "pin==%@", self.pin)
+        
+        print(fetchRequest.predicate)
         
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.sharedContext, sectionNameKeyPath: nil, cacheName: nil)
         fetchedResultsController.delegate = self

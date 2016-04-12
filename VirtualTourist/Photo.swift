@@ -35,17 +35,17 @@ class Photo: NSManagedObject {
         idString = dictionary[Keys.IdString] as! String
         title = dictionary[Keys.Title] as? String
         photoPath = dictionary[Keys.PhotoPath] as? String
-        
-        
+        uniquePhotoId = NSUUID().UUIDString
     }
+    
     
     var image: UIImage? {
         get {
-            return FlickrClient.Caches.imageCache.imageWithIdentifier(idString)
+            return FlickrClient.Caches.imageCache.imageWithIdentifier(uniquePhotoId)
         }
         
         set {
-           FlickrClient.Caches.imageCache.storeImage(newValue, withIdentifier: idString)
+            FlickrClient.Caches.imageCache.storeImage(newValue, withIdentifier: uniquePhotoId)
         }
     }
 }

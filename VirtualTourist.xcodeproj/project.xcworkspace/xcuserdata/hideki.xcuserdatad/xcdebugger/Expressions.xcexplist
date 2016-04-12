@@ -3,13 +3,13 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "PhotoCell.photo.didset:PhotoCell.swift">
-      </ContextState>
-      <ContextState
-         contextName = "PhotosViewController.numberOfSectionsInCollectionView(UICollectionView) -&gt; Int:PhotosViewController.swift">
+         contextName = "TopViewController.mapTapped(UITapGestureRecognizer) -&gt; ():TopViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "self.fetchedResultsController.sections">
+               value = "annotations">
+            </PersistentString>
+            <PersistentString
+               value = "pins">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -23,6 +23,17 @@
                value = " FlickrClient.Caches.imageCache.imageWithIdentifier(uniquePhotoId)">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "PhotosViewController.numberOfSectionsInCollectionView(UICollectionView) -&gt; Int:PhotosViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.fetchedResultsController.sections">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "PhotoCell.photo.didset:PhotoCell.swift">
       </ContextState>
       <ContextState
          contextName = "TopViewController.(mapLongPressed(UILongPressGestureRecognizer) -&gt; ()).(closure #1).(closure #1):TopViewController.swift">
@@ -66,6 +77,9 @@
             </PersistentString>
             <PersistentString
                value = "image">
+            </PersistentString>
+            <PersistentString
+               value = "photoDelegate">
             </PersistentString>
             <PersistentString
                value = "self.image">

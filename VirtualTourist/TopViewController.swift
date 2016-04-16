@@ -22,6 +22,7 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
     var annotations = [MKPointAnnotation]()
     var pins:[Pin]!
     
+    
     //###################################################################################
     // MARK: SharedContext
     var sharedContext = CoreDataStackManager.sharedInstance().managedObjectContext!
@@ -139,40 +140,51 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         annotation.coordinate = point
         let newPin = insertNewPin(annotation,  span: map.region.span)
         
-        map.addAnnotation(annotation)
+        //map.addAnnotation(annotation)
         
-        // TODO: Get Photos from API
-        FlickrClient.sharedInstance().getPhotosInfoByLocation(point.longitude, latitude: point.latitude, currentPage: 1){
+        // Get Photos from API
+        FlickrClient.sharedInstance().getPhotosInfoByLocation(point.longitude, latitude: point.latitude, currentPage: 1, maxUploadDate: nil){
             success, error in
             
             if success {
+                var index = 0
+                let lastIndex = FlickrClient.sharedInstance().flickrResponse!.photos.count - 1
                 for photoInfo in FlickrClient.sharedInstance().flickrResponse!.photos {
-                    
-                    let url = NSURL(string: photoInfo.urlM!)!
-                    print("Download Started")
-                    print("lastPathComponent: " + (url.lastPathComponent ?? ""))
-                    self.getDataFromUrl(url) { (data, response, err)  in
-                        dispatch_async(dispatch_get_main_queue()) { () -> Void in
-                            guard let data = data where err == nil else { return }
-                            //print(response?.suggestedFilename ?? "")
-                            //print("Download Finished")
-                            let photo = Photo(dictionary: photoInfo.getPhotoDictionary(), context: self.sharedContext)
-                            photo.image = UIImage(data: data)
-                            photo.pin = newPin
-                            CoreDataStackManager.sharedInstance().saveContext()
-                        }
+                    let photo = Photo(dictionary: photoInfo.getPhotoDictionary(), context: self.sharedContext)
+                    photo.pin = newPin
+                    index += 1
+                    if (index == lastIndex) {
+                        newPin.minDateUpload = photo.dateUpload
                     }
-
-                    
-//                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)){
-//                        print(url)
-//                        let downloadPhoto = UIImage(data: NSData(contentsOfURL: url)!)
-//                        print("downloading...")
-//                        dispatch_async(dispatch_get_main_queue(), {
-//                            
-//                        })
-//                    }
                 }
+                CoreDataStackManager.sharedInstance().saveContext()
+                dispatch_async(dispatch_get_main_queue()){
+                    self.map.addAnnotation(annotation)
+                }
+                let fetchRequest = NSFetchRequest(entityName: "Photo")
+                //fetchRequest.sortDescriptors = [NSSortDescriptor(key: "imageURL", ascending: true)]
+                fetchRequest.predicate = NSPredicate(format: "pin==%@", newPin)
+                
+                var results: NSArray?
+                do {
+                    results = try CoreDataStackManager.sharedInstance().managedObjectContext?.executeFetchRequest(fetchRequest)
+                } catch let error as NSError {
+                    print("Could not fetch \(error), \(error.userInfo)")
+                }
+                SharedFunctions.loadPhotos(results)
+//                for item in results! {
+//                    let photo = item as! Photo;
+//                    let url = NSURL(string: photo.photoPath)!
+//                    self.getDataFromUrl(url) { (data, response, err)  in
+//                        dispatch_async(dispatch_get_main_queue()) {
+//                            print("Download Started")
+//                            print("lastPathComponent: " + (url.lastPathComponent ?? ""))
+//                            guard let data = data where err == nil else { return }
+//                            photo.image = UIImage(data: data)
+//                            CoreDataStackManager.sharedInstance().saveContext()
+//                        }
+//                    }
+//                }
             } else {
                 
             }
@@ -218,9 +230,9 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
                     let controller = storyboard!.instantiateViewControllerWithIdentifier("PhotosViewController") as! PhotosViewController
                     controller.region = map.region
                     controller.pin = pins[index]
-                    //print(controller.pin)
                     navigationItem.title = "OK"
                     navigationController!.pushViewController(controller, animated: true)
+
                 }
             }
         }
@@ -257,6 +269,7 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
 
         let dictionary: [String: AnyObject] = [
             Pin.Keys.AnnotationIndex: index,
+            Pin.Keys.LastPage: 0,
             Pin.Keys.Latitude : annotation.coordinate.latitude,
             Pin.Keys.Longitude : annotation.coordinate.longitude
         ]

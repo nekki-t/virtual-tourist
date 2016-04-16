@@ -12,9 +12,10 @@ struct FlickrPhoto {
     var photo: String?
     var id: String?
     var title: String?
-    var urlM: String?
-    var heightM: Int?
-    var widthM: Int?
+    var urlQ: String?
+    var latitude: String?
+    var longitude: String?
+    var dateUpload: String?
     
     
     init(){}
@@ -32,16 +33,20 @@ struct FlickrPhoto {
             title = inTitle
         }
         
-        if let inUrlM = dictionary[DictionaryKeys.UrlM] as? String {
-            urlM = inUrlM
+        if let inUrlQ = dictionary[DictionaryKeys.UrlQ] as? String {
+            urlQ = inUrlQ
         }
         
-        if let inHeightM = dictionary[DictionaryKeys.HeightM] as? Int {
-            heightM = inHeightM
+        if let inLatitude = dictionary[DictionaryKeys.Latitude] as? String {
+            latitude = inLatitude
         }
         
-        if let inWidthM = dictionary[DictionaryKeys.WidthM] as? Int {
-            widthM = inWidthM
+        if let inLongitude = dictionary[DictionaryKeys.Longitude] as? String {
+            longitude = inLongitude
+        }
+        
+        if let inDateUpload = dictionary[DictionaryKeys.DateUpload] as? String {
+            dateUpload = inDateUpload
         }
     }
     
@@ -49,7 +54,10 @@ struct FlickrPhoto {
         return [
             Photo.Keys.IdString: id!,
             Photo.Keys.Title: title!,
-            Photo.Keys.PhotoPath: urlM!
+            Photo.Keys.PhotoPath: urlQ!,
+            Photo.Keys.DateUpload: dateUpload!,
+            Photo.Keys.Latitude: latitude!,
+            Photo.Keys.Longitude: longitude!
         ]
     }
     
@@ -57,8 +65,9 @@ struct FlickrPhoto {
         static let Photo = "photo"
         static let Id = "id"
         static let Title = "title"
-        static let UrlM = "url_m"
-        static let HeightM = "height_m"
-        static let WidthM = "width_m"        
+        static let UrlQ = "url_q"
+        static let DateUpload = "dateupload"
+        static let Latitude = "latitude"
+        static let Longitude = "longitude"
     }
 }

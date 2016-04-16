@@ -28,9 +28,11 @@ class FlickrClient: NSObject {
         static let imageCache = ImageCache()
     }
     
-    func getPhotosInfoByLocation(longitude: Double, latitude: Double, currentPage: Int!, completionHandler: (success: Bool, error: String?) -> Void){
+    
+    
+    func getPhotosInfoByLocation(longitude: Double, latitude: Double, currentPage: Int!, maxUploadDate: String?, completionHandler: (success: Bool, error: String?) -> Void){
         
-        let methodArguments = [
+        var methodArguments = [
             FlickrClient.JsonKeys.METHOD: FlickrClient.Constants.METHOD_NAME,
             FlickrClient.JsonKeys.API_KEY: FlickrClient.Constants.API_KEY,
             FlickrClient.JsonKeys.BBOX: createBoundingBoxString(latitude, longitude: longitude),
@@ -42,6 +44,9 @@ class FlickrClient: NSObject {
             FlickrClient.JsonKeys.PER_PAGE: String(FlickrClient.Constants.PER_PAGE),
             FlickrClient.JsonKeys.PAGE: String(currentPage)
         ]
+        if let pMaxUploadDate: String  = maxUploadDate {
+            methodArguments[FlickrClient.JsonKeys.MAX_UPLOAD_DATE] = decreaseTimeStampString(pMaxUploadDate)
+        }
 
         let urlString = FlickrClient.Constants.BASE_URL + FlickrClient.escapedParameters(methodArguments);
         let request = NSMutableURLRequest(URL: NSURL(string: urlString)!)
@@ -92,15 +97,22 @@ class FlickrClient: NSObject {
 
     
     // MARK: - Helpers
+    // Decrease 1 from TimeStamp StringValue
+    func decreaseTimeStampString(target: String) -> String {
+        var timeStamp = Int(target)!
+        timeStamp = timeStamp - 1
+        return String(timeStamp)
+    }
+    
     /* LAT/LON Manipulation */
     func createBoundingBoxString(latitude: Double, longitude: Double) -> String{
         // Bottom Left
-        let bottom_left_lon = max(longitude - FlickrClient.Constants.BOUNDING_BOX_HALF_WIDTH, FlickrClient.Constants.LON_MIN)
-        let bottom_left_lat = max(latitude  - FlickrClient.Constants.BOUNDING_BOX_HALF_WIDTH, FlickrClient.Constants.LAT_MIN)
+        let bottom_left_lon = max(longitude - FlickrClient.Constants.BOUNDING_BOX_ADJUST_WIDTH, FlickrClient.Constants.LON_MIN)
+        let bottom_left_lat = max(latitude  - FlickrClient.Constants.BOUNDING_BOX_ADJUST_WIDTH, FlickrClient.Constants.LAT_MIN)
 
         // Top Right
-        let top_right_lon = max(longitude + FlickrClient.Constants.BOUNDING_BOX_HALF_HEIGHT, FlickrClient.Constants.LON_MAX)
-        let top_right_lat = max(latitude + FlickrClient.Constants.BOUNDING_BOX_HALF_HEIGHT, FlickrClient.Constants.LAT_MAX)
+        let top_right_lon = min(longitude + FlickrClient.Constants.BOUNDING_BOX_ADJUST_HEIGHT, FlickrClient.Constants.LON_MAX)
+        let top_right_lat = min(latitude + FlickrClient.Constants.BOUNDING_BOX_ADJUST_HEIGHT, FlickrClient.Constants.LAT_MAX)
         
         let bbox = "\(bottom_left_lon),\(bottom_left_lat),\(top_right_lon),\(top_right_lat)"
         print("BBOX: \(bbox)")

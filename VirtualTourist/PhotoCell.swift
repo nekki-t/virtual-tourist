@@ -14,11 +14,12 @@ class PhotoCell: UICollectionViewCell {
     
     // MARK: - Variables
     var loadIndicator: UIActivityIndicatorView?
+    var photoLoadedObserver: NSObjectProtocol?
     var photo: Photo?{
         didSet{
             showIndicator()
+            print(photo?.uniquePhotoId)
             dispatch_async(dispatch_get_main_queue()) {
-                //dispatch_async(dispatch_get_main_queue()){
                 if let p = self.photo {
                     
                     if let image = p.image {
@@ -31,12 +32,32 @@ class PhotoCell: UICollectionViewCell {
         }
     }
     
+    
     // MARK: - IBOutlet
     @IBOutlet weak var photoImage: UIImageView!
     
     
+    // MARK: - Functions
+    // MARK: observer
+    func registerPhotoLoadedObserver(observerName: String) {
+        photoLoadedObserver = NSNotificationCenter.defaultCenter().addObserverForName(
+            observerName,
+            object: nil,
+            queue: nil,
+            usingBlock: {
+                notification in
+                self.photoImage.image = self.photo!.image
+                self.backgroundColor = UIColor.whiteColor()
+                self.hideIndicator()
+                NSNotificationCenter.defaultCenter().removeObserver(self.photoLoadedObserver!)
+            }
+        )
+    }
     
     
+  
+    
+    // MARK: Indicator
     func showIndicator() {
         self.loadIndicator = UIActivityIndicatorView(frame: CGRectMake(0, 0, self.bounds.width, self.bounds.height))
         self.loadIndicator?.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.WhiteLarge

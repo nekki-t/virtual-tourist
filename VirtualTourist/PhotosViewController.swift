@@ -14,7 +14,8 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, MKMapV
     
     //###################################################################################
     // MARK: - Constants
-    
+    let defaultButtonTitle = "New Collection"
+    let deletingButtonTitle = "Remove Selected Pictures"
 
     //###################################################################################
     // MARK: - IB Outlets
@@ -26,28 +27,24 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, MKMapV
     // MARK: - Variables
     var region: MKCoordinateRegion!
     var pin: Pin!
+    var isLoding = false
+    
+    var selectedIndexes = [NSIndexPath]()
+    
+    // Keep the changes. We will keep track of insertions, deletions, and updates.
+    var insertedIndexPaths: [NSIndexPath]!
+    var deletedIndexPaths: [NSIndexPath]!
+    var updatedIndexPaths: [NSIndexPath]!
+    
     
     // MARK: SharedContext
     var sharedContext = CoreDataStackManager.sharedInstance().managedObjectContext!
-    
-    var loadPhotosObserver: NSObjectProtocol?
     
     //###################################################################################
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        var error: NSError?
-
-        do{
-            try fetchedResultsController.performFetch()
-        } catch let err as NSError {
-            error = err
-        }
-
-        print("COUNT: ===>>>")
-        print(fetchedResultsController.sections![0].numberOfObjects)
-
-        
+        bottomButton.title = defaultButtonTitle
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -66,12 +63,16 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, MKMapV
             print("Error performing initial fetch: \(error)")
         }
         
+        print(pin.objectID)
         
         collectionView.reloadData()
-        
     }
     
-    
+    override func viewWillDisappear(animated: Bool) {
+        
+        super.viewWillDisappear(animated)
+        
+    }
     
     // Layout the collection view
     override func viewDidLayoutSubviews() {
@@ -83,14 +84,6 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, MKMapV
         let width = floor(self.collectionView.frame.size.width / 3)
         layout.itemSize = CGSize(width: width, height: width)
         collectionView.collectionViewLayout = layout
-    }
-    
-    //###################################################################################
-    // MARK: - Observer Function
-    func registerLoadPhotosObserver() {
-//        loadPhotosObserver = NSNotificationCenter.defaultCenter().addObserverForName(
-//            SharedConstants.LoadPhotosObserver,
-//            object: <#T##AnyObject?#>, queue: <#T##NSOperationQueue?#>, usingBlock: <#T##(NSNotification) -> Void#>)
     }
     
     
@@ -114,6 +107,12 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, MKMapV
         map.showAnnotations([point], animated: true)
     }
     
+    // MARK: Button Actions
+    @IBAction func getNewCollection(sender: UIBarButtonItem) {
+        isLoding = true
+        bottomButton.enabled = false
+    }
+    
     //###################################################################################
     // MARK: - NSFetchedResultsController
     lazy var fetchedResultsController: NSFetchedResultsController = {
@@ -128,6 +127,8 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, MKMapV
         
         return fetchedResultsController
     }()
+
+    
     
     //###################################################################################
     // MARK: - UICollectionView
@@ -137,8 +138,6 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, MKMapV
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let sectionInfo = self.fetchedResultsController.sections![section]
-        
-        print("number Of Cells: \(sectionInfo.numberOfObjects)")
         return sectionInfo.numberOfObjects
     }
     
@@ -150,18 +149,55 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, MKMapV
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-//        let cell = collectionView.cellForItemAtIndexPath(indexPath) as! PhotoCell
-//        
-//        if let index = selectedIndexes.indexOf(indexPath) {
-//            selectedIndexes.removeAtIndex(index)
-//        } else {
-//            selectedIndexes.append(indexPath)
-//        }
-//        
-//        configureCell(cell, atIndexPath: indexPath)
-//        
-       // updateBottomButton()
+        let cell = collectionView.cellForItemAtIndexPath(indexPath) as! PhotoCell
+        
+        if let index = selectedIndexes.indexOf(indexPath) {
+            selectedIndexes.removeAtIndex(index)
+            if selectedIndexes.count < 1 {
+                bottomButton.title = defaultButtonTitle
+            }
+        } else {
+            selectedIndexes.append(indexPath)
+            bottomButton.title = deletingButtonTitle
+        }
+        
+        configureCell(cell, atIndexPath: indexPath)
     }
+    
+    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+        
+        switch type{
+            
+        case .Insert:
+            print("Insert an item")
+            // Here we are noting that a new Color instance has been added to Core Data. We remember its index path
+            // so that we can add a cell in "controllerDidChangeContent". Note that the "newIndexPath" parameter has
+            // the index path that we want in this case
+            insertedIndexPaths.append(newIndexPath!)
+            break
+        case .Delete:
+            print("Delete an item")
+            // Here we are noting that a Color instance has been deleted from Core Data. We keep remember its index path
+            // so that we can remove the corresponding cell in "controllerDidChangeContent". The "indexPath" parameter has
+            // value that we want in this case.
+            deletedIndexPaths.append(indexPath!)
+            break
+        case .Update:
+            print("Update an item.")
+            // We don't expect Color instances to change after they are created. But Core Data would
+            // notify us of changes if any occured. This can be useful if you want to respond to changes
+            // that come about after data is downloaded. For example, when an images is downloaded from
+            // Flickr in the Virtual Tourist app
+            updatedIndexPaths.append(indexPath!)
+            break
+        case .Move:
+            print("Move an item. We don't expect to see this in this app.")
+            break
+        default:
+            break
+        }
+    }
+
 
     //###################################################################################
     // MARK: - Local Functions
@@ -171,15 +207,17 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, MKMapV
     
     // MARK: - Configure Cell
     func configureCell(cell: PhotoCell, atIndexPath indexPath: NSIndexPath) {
-        let photo = self.fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
+        if cell.photo == nil {
+            let photo = self.fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
+            cell.photo = photo
+            cell.registerPhotoLoadedObserver(photo.getObserverName())
+        }
         
-        cell.photo = photo
-        
-//        if let _ = selectedIndexes.indexOf(indexPath) {
-//            cell.colorPanel.alpha = 0.05
-//        } else {
-//            cell.colorPanel.alpha = 1.0
-//        }
+        if let _ = selectedIndexes.indexOf(indexPath) {
+            cell.photoImage.alpha = 0.3
+        } else {
+            cell.photoImage.alpha = 1.0
+        }
     }
 
 }

@@ -67,10 +67,32 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "TopViewController.(mapLongPressed(UILongPressGestureRecognizer) -&gt; ()).(closure #1):TopViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "newPin.photos">
+            </PersistentString>
+            <PersistentString
+               value = "newPin.photos[0]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "Pin.init(dictionary : [String : AnyObject], context : NSManagedObjectContext) -&gt; Pin:Pin.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "dictionary[Keys.LastPage] ">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "Photo.image.setter:Photo.swift">
          <PersistentStrings>
             <PersistentString
                value = "photoPath">
+            </PersistentString>
+            <PersistentString
+               value = "triggerDegate">
             </PersistentString>
             <PersistentString
                value = "idString">

@@ -13,14 +13,13 @@ extension FlickrClient {
         static let BASE_URL = "https://api.flickr.com/services/rest/"
         static let METHOD_NAME = "flickr.photos.search"
         static let API_KEY = "183b53e2d1b4c9faedc9373b9e3be7d3" //このキーは自分のものと書き換えてください。
-        static let EXTRAS = "url_m"
+        static let EXTRAS = "url_q,date_upload,geo"
         static let SAFE_SEARCH = "1"
         static let DATA_FORMAT = "json"
         static let NO_JSON_CALLBACK = "1"
-        static let ACCURACY = "6"
-        
-        static let BOUNDING_BOX_HALF_WIDTH = 1.0
-        static let BOUNDING_BOX_HALF_HEIGHT = 1.0
+        static let ACCURACY = "11"
+        static let BOUNDING_BOX_ADJUST_WIDTH = 0.1
+        static let BOUNDING_BOX_ADJUST_HEIGHT = 0.1
         static let LAT_MIN = -90.0
         static let LAT_MAX = 90.0
         static let LON_MIN = -180.0
@@ -28,6 +27,7 @@ extension FlickrClient {
         
         static let PER_PAGE = 21
         static let DEFAULT_PAGE = 1
+        
     }
     
     struct JsonKeys {
@@ -41,7 +41,7 @@ extension FlickrClient {
         static let ACCURACY = "accuracy"
         static let PER_PAGE = "per_page"
         static let PAGE = "page"
-        
+        static let MAX_UPLOAD_DATE = "max_upload_date"
     }
     // MARK: - JSON Response Keys
     struct JSONResponseKeys {
@@ -50,10 +50,10 @@ extension FlickrClient {
         static let PAGES = "pages"
         static let PER_PAGE = "perpage"
         static let PHOTO = "photo"
-        
         static let IMAGE_URL = "url_m"
         static let IMAGE_HEIGHT = "height_m"
         static let IMAGE_WIDTH = "width_m"
         static let TITLE = "title"
+        static let MAX_TAKEN_DATE = "max_taken_date"
     }
 }

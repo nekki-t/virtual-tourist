@@ -28,6 +28,8 @@ extension FlickrClient {
         static let PER_PAGE = 21
         static let DEFAULT_PAGE = 1
         
+        static let SORT_STRING = "date-upload-desc"
+        
     }
     
     struct JsonKeys {
@@ -42,6 +44,7 @@ extension FlickrClient {
         static let PER_PAGE = "per_page"
         static let PAGE = "page"
         static let MAX_UPLOAD_DATE = "max_upload_date"
+        static let SORT = "sort"
     }
     // MARK: - JSON Response Keys
     struct JSONResponseKeys {

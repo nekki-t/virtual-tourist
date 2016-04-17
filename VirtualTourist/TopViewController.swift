@@ -123,7 +123,7 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
             break
         }
     }
-    
+   
     //###################################################################################
     // MARK: - Custom Actions
     
@@ -140,29 +140,22 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         annotation.coordinate = point
         let newPin = insertNewPin(annotation,  span: map.region.span)
         
-        //map.addAnnotation(annotation)
-        
         // Get Photos from API
-        FlickrClient.sharedInstance().getPhotosInfoByLocation(point.longitude, latitude: point.latitude, currentPage: 1, maxUploadDate: nil){
+        FlickrClient.sharedInstance().getPhotosInfoByLocation(point.longitude, latitude: point.latitude, currentPage: SharedConstants.StartPage){
             success, error in
             
             if success {
-                var index = 0
-                let lastIndex = FlickrClient.sharedInstance().flickrResponse!.photos.count - 1
                 for photoInfo in FlickrClient.sharedInstance().flickrResponse!.photos {
                     let photo = Photo(dictionary: photoInfo.getPhotoDictionary(), context: self.sharedContext)
                     photo.pin = newPin
-                    index += 1
-                    if (index == lastIndex) {
-                        newPin.minDateUpload = photo.dateUpload
-                    }
                 }
+                newPin.totalPages = FlickrClient.sharedInstance().flickrResponse!.pages
+                newPin.lastPage = SharedConstants.StartPage
                 CoreDataStackManager.sharedInstance().saveContext()
                 dispatch_async(dispatch_get_main_queue()){
                     self.map.addAnnotation(annotation)
                 }
                 let fetchRequest = NSFetchRequest(entityName: "Photo")
-                //fetchRequest.sortDescriptors = [NSSortDescriptor(key: "imageURL", ascending: true)]
                 fetchRequest.predicate = NSPredicate(format: "pin==%@", newPin)
                 
                 var results: NSArray?
@@ -171,22 +164,9 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
                 } catch let error as NSError {
                     print("Could not fetch \(error), \(error.userInfo)")
                 }
-                SharedFunctions.loadPhotos(results)
-//                for item in results! {
-//                    let photo = item as! Photo;
-//                    let url = NSURL(string: photo.photoPath)!
-//                    self.getDataFromUrl(url) { (data, response, err)  in
-//                        dispatch_async(dispatch_get_main_queue()) {
-//                            print("Download Started")
-//                            print("lastPathComponent: " + (url.lastPathComponent ?? ""))
-//                            guard let data = data where err == nil else { return }
-//                            photo.image = UIImage(data: data)
-//                            CoreDataStackManager.sharedInstance().saveContext()
-//                        }
-//                    }
-//                }
+                Photo.loadPhotos(results)
             } else {
-                
+                print(error)
             }
         }
     }
@@ -210,17 +190,13 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         mapTap = UITapGestureRecognizer(target: self, action: #selector(mapTapped))
         map.addGestureRecognizer(mapTap)
         
-        
         bottomEditMessagePosY.constant -= bottomEditMessageHeight.constant
-
     }
     
     func mapTapped(gesture: UITapGestureRecognizer) {
         let tapPoint: CGPoint = gesture.locationInView(map)
         if let annotationView = map.hitTest(tapPoint, withEvent: nil) as? MKPinAnnotationView {
-            print("pintapped")
             if let index = annotations.indexOf(annotationView.annotation as! MKPointAnnotation) {
-                print("#####>>>>>> tapped index = \(index)")
                 if toDelete {
                     if index > -1 {
                         deletePinData(index)
@@ -265,13 +241,11 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
     // MARK: - Core Data
     func insertNewPin(annotation: MKPointAnnotation, span: MKCoordinateSpan) -> Pin{
         
-        let index = pins.count
-
         let dictionary: [String: AnyObject] = [
-            Pin.Keys.AnnotationIndex: index,
             Pin.Keys.LastPage: 0,
             Pin.Keys.Latitude : annotation.coordinate.latitude,
-            Pin.Keys.Longitude : annotation.coordinate.longitude
+            Pin.Keys.Longitude : annotation.coordinate.longitude,
+            Pin.Keys.TotalPages: 0
         ]
         
         let pin = Pin(dictionary: dictionary, context: sharedContext)
@@ -279,8 +253,6 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         CoreDataStackManager.sharedInstance().saveContext()
         pins.append(pin)
         annotations.append(annotation)
-        
-        print("!!!!!!!!!!!!!!!! inserted index: \(index)")
         return pin
     }
     
@@ -289,7 +261,36 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         pin.latitude = location.latitude
         pin.longitude = location.longitude
         CoreDataStackManager.sharedInstance().saveContext()
+        
+        FlickrClient.sharedInstance().getPhotosInfoByLocation(location.longitude, latitude: location.latitude, currentPage: SharedConstants.StartPage){
+            success, error in
+            
+            if success {
+                for photoInfo in FlickrClient.sharedInstance().flickrResponse!.photos {
+                    let photo = Photo(dictionary: photoInfo.getPhotoDictionary(), context: self.sharedContext)
+                    photo.pin = pin
+                }
+                pin.totalPages = FlickrClient.sharedInstance().flickrResponse!.pages
+                pin.lastPage = SharedConstants.StartPage
+                CoreDataStackManager.sharedInstance().saveContext()
+                
+                let fetchRequest = NSFetchRequest(entityName: "Photo")
+                fetchRequest.predicate = NSPredicate(format: "pin==%@", pin)
+                
+                var results: NSArray?
+                do {
+                    results = try CoreDataStackManager.sharedInstance().managedObjectContext?.executeFetchRequest(fetchRequest)
+                } catch let error as NSError {
+                    print("Could not fetch \(error), \(error.userInfo)")
+                }
+                Photo.loadPhotos(results)
+            } else {
+                print(error)
+            }
+        }
     }
+    
+
     
     func deletePinData(index: Int) {
         sharedContext.deleteObject(pins[index])

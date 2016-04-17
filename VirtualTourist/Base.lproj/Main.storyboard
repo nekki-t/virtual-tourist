@@ -63,7 +63,7 @@
                         <outlet property="editButton" destination="aWk-Wp-wgs" id="f1i-f2-o9L"/>
                         <outlet property="map" destination="o8u-M6-HR2" id="ssy-m1-PXr"/>
                         <outlet property="mapPosY" destination="rGi-KP-1LF" id="u3J-g9-jEW"/>
-                        <segue destination="zxM-qx-fQt" kind="show" identifier="" id="cvg-6k-DA7"/>
+                        <segue destination="zxM-qx-fQt" kind="show" identifier="toPhotosViewController" id="cvg-6k-DA7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -86,12 +86,17 @@
                                 <rect key="frame" x="0.0" y="512" width="600" height="44"/>
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="t2Z-k8-cew"/>
-                                    <barButtonItem title="New Collection" id="mE7-sZ-RRf"/>
+                                    <barButtonItem title="New Collection" id="mE7-sZ-RRf">
+                                        <connections>
+                                            <action selector="bottomButtonTapped:" destination="zxM-qx-fQt" id="kmJ-dF-CDY"/>
+                                        </connections>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="fjJ-jV-u03"/>
                                 </items>
                             </toolbar>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="w7N-zW-EyS">
                                 <rect key="frame" x="0.0" y="214" width="600" height="298"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Pm7-rn-h7m">
                                     <size key="itemSize" width="168" height="151"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>

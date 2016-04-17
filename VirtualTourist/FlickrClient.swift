@@ -30,9 +30,9 @@ class FlickrClient: NSObject {
     
     
     
-    func getPhotosInfoByLocation(longitude: Double, latitude: Double, currentPage: Int!, maxUploadDate: String?, completionHandler: (success: Bool, error: String?) -> Void){
+    func getPhotosInfoByLocation(longitude: Double, latitude: Double, currentPage: Int!, completionHandler: (success: Bool, error: String?) -> Void){
         
-        var methodArguments = [
+        let methodArguments = [
             FlickrClient.JsonKeys.METHOD: FlickrClient.Constants.METHOD_NAME,
             FlickrClient.JsonKeys.API_KEY: FlickrClient.Constants.API_KEY,
             FlickrClient.JsonKeys.BBOX: createBoundingBoxString(latitude, longitude: longitude),
@@ -41,14 +41,13 @@ class FlickrClient: NSObject {
             FlickrClient.JsonKeys.FORMAT: FlickrClient.Constants.DATA_FORMAT,
             FlickrClient.JsonKeys.NO_JSON_CALL_BACK: FlickrClient.Constants.NO_JSON_CALLBACK,
             FlickrClient.JsonKeys.ACCURACY: FlickrClient.Constants.ACCURACY,
-            FlickrClient.JsonKeys.PER_PAGE: String(FlickrClient.Constants.PER_PAGE),
-            FlickrClient.JsonKeys.PAGE: String(currentPage)
+            FlickrClient.JsonKeys.PAGE: String(currentPage),
+            FlickrClient.JsonKeys.PER_PAGE: String(FlickrClient.Constants.PER_PAGE)
         ]
-        if let pMaxUploadDate: String  = maxUploadDate {
-            methodArguments[FlickrClient.JsonKeys.MAX_UPLOAD_DATE] = decreaseTimeStampString(pMaxUploadDate)
-        }
-
+        
         let urlString = FlickrClient.Constants.BASE_URL + FlickrClient.escapedParameters(methodArguments);
+        print("!!!URL=================>>>>>>")
+        print(urlString)
         let request = NSMutableURLRequest(URL: NSURL(string: urlString)!)
         let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithRequest(request) {

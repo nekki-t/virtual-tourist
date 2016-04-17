@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 
 class Photo: NSManagedObject {
+    // MARK: - Key Strings
     struct Keys {
         static let IdString = "idString"
         static let PhotoPath = "photoPath"
@@ -19,6 +20,7 @@ class Photo: NSManagedObject {
         static let Longitude = "longitude"
     }
     
+    // MARK: - Attributes
     @NSManaged var uniquePhotoId: String
     @NSManaged var idString: String
     @NSManaged var photoPath: String
@@ -28,7 +30,7 @@ class Photo: NSManagedObject {
     @NSManaged var longitude: String
     @NSManaged var pin: Pin
     
-   
+    // MARK: - Initializers
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
     }
@@ -49,6 +51,16 @@ class Photo: NSManagedObject {
     }
     
     
+    // MARK: - Deleting
+    override func willSave() {
+        super.willSave()
+        if deleted {
+            FlickrClient.Caches.imageCache.storeImage(nil, withIdentifier: uniquePhotoId)
+        }
+    }
+    
+    
+    // MARK: Accessor -> Image
     var image: UIImage? {
         get {
             return FlickrClient.Caches.imageCache.imageWithIdentifier(uniquePhotoId)
@@ -60,8 +72,32 @@ class Photo: NSManagedObject {
         }
     }
     
+    // MARK: - Helpers
     func getObserverName() -> String {
         let result = SharedConstants.LoadPhotosObserver + uniquePhotoId
         return result
+    }
+    
+    
+    // MARK: - Loading Images
+    class func loadPhotos(fetchedObjects: NSArray?) {
+        for item in fetchedObjects! {
+            let photo = item as! Photo;
+            let url = NSURL(string: photo.photoPath)!
+            self.getDataFromUrl(url) { (data, response, err)  in
+                dispatch_async(dispatch_get_main_queue()) {
+                    guard let data = data where err == nil else { return }
+                    photo.image = UIImage(data: data)
+                    CoreDataStackManager.sharedInstance().saveContext()
+                }
+            }
+        }
+    }
+    
+    private class func getDataFromUrl(url:NSURL, completion: ((data: NSData?, response: NSURLResponse?, error: NSError? ) -> Void)) {
+        NSURLSession.sharedSession().dataTaskWithURL(url) {
+            (data, response, error) in
+            completion(data: data, response: response, error: error)
+            }.resume()
     }
 }

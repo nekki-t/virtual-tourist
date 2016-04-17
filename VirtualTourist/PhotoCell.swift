@@ -18,7 +18,6 @@ class PhotoCell: UICollectionViewCell {
     var photo: Photo?{
         didSet{
             showIndicator()
-            print(photo?.uniquePhotoId)
             dispatch_async(dispatch_get_main_queue()) {
                 if let p = self.photo {
                     
@@ -40,6 +39,7 @@ class PhotoCell: UICollectionViewCell {
     // MARK: - Functions
     // MARK: observer
     func registerPhotoLoadedObserver(observerName: String) {
+        removePhotoLoadedObserver()
         photoLoadedObserver = NSNotificationCenter.defaultCenter().addObserverForName(
             observerName,
             object: nil,
@@ -49,9 +49,15 @@ class PhotoCell: UICollectionViewCell {
                 self.photoImage.image = self.photo!.image
                 self.backgroundColor = UIColor.whiteColor()
                 self.hideIndicator()
-                NSNotificationCenter.defaultCenter().removeObserver(self.photoLoadedObserver!)
+                self.removePhotoLoadedObserver()
             }
         )
+    }
+    
+    func removePhotoLoadedObserver() {
+        if photoLoadedObserver != nil {
+            NSNotificationCenter.defaultCenter().removeObserver(self.photoLoadedObserver!)
+        }
     }
     
     

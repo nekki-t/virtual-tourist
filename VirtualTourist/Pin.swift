@@ -12,21 +12,22 @@ import MapKit
 
 class Pin: NSManagedObject {
     
+    // MARK: - Key Strings
     struct Keys {
-        static let AnnotationIndex = "annotationIndex"
         static let LastPage = "lastPage"
         static let Longitude = "longitude"
         static let Latitude = "latitude"
-        static let MinDateUpload = "minDateUpload"
+        static let TotalPages = "totalPages"
     }
 
-    @NSManaged var annotationIndex: Int
+    // MARK: - Attributes
     @NSManaged var lastPage: Int
     @NSManaged var longitude: Double
     @NSManaged var latitude: Double
-    @NSManaged var minDateUpload: String
+    @NSManaged var totalPages: Int
     @NSManaged var photos: [Photo]
     
+    // MARK: - Initializers
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
     }
@@ -38,9 +39,9 @@ class Pin: NSManagedObject {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
         
         // Dictionary
-        annotationIndex = (dictionary[Keys.AnnotationIndex] as! NSNumber).integerValue
         lastPage = (dictionary[Keys.LastPage] as! NSNumber).integerValue
         longitude = dictionary[Keys.Longitude] as! Double
         latitude = dictionary[Keys.Latitude] as! Double
+        totalPages = (dictionary[Keys.TotalPages] as! NSNumber).integerValue
     }   
 }

@@ -290,7 +290,6 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         }
     }
     
-
     
     func deletePinData(index: Int) {
         sharedContext.deleteObject(pins[index])

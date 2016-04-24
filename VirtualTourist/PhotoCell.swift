@@ -17,6 +17,7 @@ class PhotoCell: UICollectionViewCell {
     var photoLoadedObserver: NSObjectProtocol?
     var photo: Photo?{
         didSet{
+            self.photoImage.image = UIImage(named: "noImage")
             showIndicator()
             dispatch_async(dispatch_get_main_queue()) {
                 if let p = self.photo {

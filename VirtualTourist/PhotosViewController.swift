@@ -38,6 +38,20 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, MKMapV
     // MARK: SharedContext
     var sharedContext = CoreDataStackManager.sharedInstance().managedObjectContext!
     
+    // MARK: NSFetchedResultsController
+    lazy var fetchedResultsController: NSFetchedResultsController = {
+        let fetchRequest = NSFetchRequest(entityName: "Photo")
+        let sortDescriptor = NSSortDescriptor(key: "dateUpload", ascending: false)
+        fetchRequest.sortDescriptors = []
+        fetchRequest.predicate = NSPredicate(format: "pin==%@", self.pin)
+        
+        
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.sharedContext, sectionNameKeyPath: nil, cacheName: nil)
+        fetchedResultsController.delegate = self
+        
+        return fetchedResultsController
+    }()
+    
     //###################################################################################
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -59,12 +73,11 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, MKMapV
         }
         
         if let error = error {
-            print("Error performing initial fetch: \(error)")
+            print("Error performing initial fetch for Photos: \(error)")
+        } else {
+            collectionView.reloadData()
         }
         
-        print(pin.objectID)
-        
-        collectionView.reloadData()
     }
     
     // Layout the collection view
@@ -103,12 +116,9 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, MKMapV
     }
     // pin tapped
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        if let annotation = view.annotation as? MKPointAnnotation {
-            let success = UIApplication.sharedApplication().openURL(NSURL(string:annotation.subtitle!)!)
-            if !success {
-                SharedFunctions.showAlert("", message: "Invalid Link", targetViewController: self)
-            }
-        }
+        let controller = storyboard!.instantiateViewControllerWithIdentifier("ReportsViewController") as! ReportsViewController
+        controller.pin = pin
+        navigationController!.pushViewController(controller, animated: true)
     }
 
     
@@ -220,20 +230,7 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, MKMapV
         return nextPage
     }
     
-    //###################################################################################
-    // MARK: - NSFetchedResultsController
-    lazy var fetchedResultsController: NSFetchedResultsController = {
-        let fetchRequest = NSFetchRequest(entityName: "Photo")
-        let sortDescriptor = NSSortDescriptor(key: "dateUpload", ascending: false)
-        fetchRequest.sortDescriptors = []
-        fetchRequest.predicate = NSPredicate(format: "pin==%@", self.pin)
-        
-        
-        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.sharedContext, sectionNameKeyPath: nil, cacheName: nil)
-        fetchedResultsController.delegate = self
-        
-        return fetchedResultsController
-    }()
+
 
     //###################################################################################
     // MARK: - NSFetchedResultsController Delegate

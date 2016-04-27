@@ -63,17 +63,17 @@
                         <outlet property="editButton" destination="aWk-Wp-wgs" id="f1i-f2-o9L"/>
                         <outlet property="map" destination="o8u-M6-HR2" id="ssy-m1-PXr"/>
                         <outlet property="mapPosY" destination="rGi-KP-1LF" id="u3J-g9-jEW"/>
-                        <segue destination="zxM-qx-fQt" kind="show" identifier="toPhotosViewController" id="cvg-6k-DA7"/>
+                        <segue destination="zxM-qx-fQt" kind="show" identifier="toPhotoAlbumViewController" id="cvg-6k-DA7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1084" y="501"/>
         </scene>
-        <!--Photos View Controller-->
+        <!--Photo Album View Controller-->
         <scene sceneID="b3F-D9-SMR">
             <objects>
-                <viewController storyboardIdentifier="PhotosViewController" id="zxM-qx-fQt" customClass="PhotosViewController" customModule="VirtualTourist" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PhotoAlbumViewController" id="zxM-qx-fQt" customClass="PhotoAlbumViewController" customModule="VirtualTourist" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="OK7-qt-L0d"/>
                         <viewControllerLayoutGuide type="bottom" id="Qvg-CB-1LF"/>

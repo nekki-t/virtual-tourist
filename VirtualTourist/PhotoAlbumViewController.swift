@@ -1,5 +1,5 @@
 //
-//  PhotosViewController.swift
+//  PhotoAlbumViewController.swift
 //  VirtualTourist
 //
 //  Created by nekki t on 2016/02/13.
@@ -11,7 +11,7 @@ import CoreData
 import Foundation
 import MapKit
 
-class PhotosViewController: UIViewController, UICollectionViewDataSource, MKMapViewDelegate, UICollectionViewDelegate, NSFetchedResultsControllerDelegate {
+class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, MKMapViewDelegate, UICollectionViewDelegate, NSFetchedResultsControllerDelegate {
     
     //###################################################################################
     // MARK: - Constants

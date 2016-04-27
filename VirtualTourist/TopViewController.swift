@@ -204,7 +204,7 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
                     }
                     map.removeAnnotation(annotationView.annotation!)
                 } else {
-                    let controller = storyboard!.instantiateViewControllerWithIdentifier("PhotosViewController") as! PhotosViewController
+                    let controller = storyboard!.instantiateViewControllerWithIdentifier("PhotoAlbumViewController") as! PhotoAlbumViewController
                     controller.region = map.region
                     controller.pin = pins[index]
                     navigationItem.title = "OK"

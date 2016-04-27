@@ -118,6 +118,7 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
                 return
             }
             updatePinData(index, location: view.annotation!.coordinate)
+            
             print("drag ended")
         default:
             break
@@ -249,7 +250,7 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         ]
         
         let pin = Pin(dictionary: dictionary, context: sharedContext)
-       
+        
         CoreDataStackManager.sharedInstance().saveContext()
         pins.append(pin)
         annotations.append(annotation)
@@ -260,6 +261,20 @@ class TopViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         let pin = pins[index]
         pin.latitude = location.latitude
         pin.longitude = location.longitude
+        
+        // delete all photos which belong to the old pin
+        let photosFetchRequest = NSFetchRequest(entityName: "Photo")
+        photosFetchRequest.predicate = NSPredicate(format: "pin==%@", pin)
+        
+        do {
+            let result = try CoreDataStackManager.sharedInstance().managedObjectContext!.executeFetchRequest(photosFetchRequest)
+            for photo in result as! [Photo] {
+                sharedContext.deleteObject(photo)
+            }
+        } catch let err as NSError{
+            print(err)
+        }
+        
         CoreDataStackManager.sharedInstance().saveContext()
         
         FlickrClient.sharedInstance().getPhotosInfoByLocation(location.longitude, latitude: location.latitude, currentPage: SharedConstants.StartPage){

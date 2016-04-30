@@ -124,11 +124,24 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, MK
 
     
     func dropPinOnMap() {
+        
+        // get the count of reports saved
+        let fetchRequest = NSFetchRequest(entityName: "Report")
+        fetchRequest.predicate = NSPredicate(format: "pin==%@", pin)
+        let count = sharedContext.countForFetchRequest(fetchRequest, error: nil)
+        
+        
         let point = MKPointAnnotation()
         point.coordinate = CLLocationCoordinate2D()
         point.coordinate.latitude = pin.latitude
         point.coordinate.longitude = pin.longitude
-        point.title = "You can add reports!"
+        
+        if count > 0 {
+            point.title = "Reports saved: \(count)"
+        } else {
+            point.title = "You can add reports!"
+        }
+        
         point.subtitle = "tap the right icon"
         map.addAnnotation(point)
         map.showAnnotations([point], animated: true)

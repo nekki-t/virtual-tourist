@@ -56,6 +56,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, MK
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "Photo Album"
         map.delegate = self
         bottomButton.title = defaultButtonTitle
     }
@@ -127,7 +128,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, MK
         point.coordinate = CLLocationCoordinate2D()
         point.coordinate.latitude = pin.latitude
         point.coordinate.longitude = pin.longitude
-        point.title = "You can add memo!"
+        point.title = "You can add reports!"
         point.subtitle = "tap the right icon"
         map.addAnnotation(point)
         map.showAnnotations([point], animated: true)

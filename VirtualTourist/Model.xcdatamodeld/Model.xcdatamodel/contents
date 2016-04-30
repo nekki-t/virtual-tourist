@@ -18,7 +18,7 @@
         <relationship name="photos" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Photo" inverseName="pin" inverseEntity="Photo" syncable="YES"/>
         <relationship name="reports" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Report" inverseName="pin" inverseEntity="Report" syncable="YES"/>
     </entity>
-    <entity name="Report" syncable="YES">
+    <entity name="Report" representedClassName=".Report" syncable="YES">
         <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="details" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="pin" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Pin" inverseName="reports" inverseEntity="Pin" syncable="YES"/>
@@ -26,6 +26,6 @@
     <elements>
         <element name="Photo" positionX="-263" positionY="-247" width="128" height="165"/>
         <element name="Pin" positionX="-531" positionY="-270" width="128" height="133"/>
-        <element name="Report" positionX="-326" positionY="-378" width="128" height="88"/>
+        <element name="Report" positionX="-326" positionY="-378" width="128" height="90"/>
     </elements>
 </model>

@@ -180,9 +180,35 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="NGc-Tw-Hzg">
-                                <rect key="frame" x="0.0" y="64" width="600" height="492"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="NGc-Tw-Hzg">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="556"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="reportCell" textLabel="ASz-Po-Ehd" detailTextLabel="v2V-n9-ZLI" style="IBUITableViewCellStyleSubtitle" id="zP1-Pn-h2Y">
+                                        <rect key="frame" x="0.0" y="86" width="600" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zP1-Pn-h2Y" id="tqO-Kw-lCI">
+                                            <rect key="frame" x="0.0" y="0.0" width="567" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ASz-Po-Ehd">
+                                                    <rect key="frame" x="15" y="5" width="32" height="20"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="v2V-n9-ZLI">
+                                                    <rect key="frame" x="15" y="25" width="41" height="14"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
                                 <connections>
                                     <outlet property="dataSource" destination="cXS-o2-tdz" id="eRF-JE-LLb"/>
                                     <outlet property="delegate" destination="cXS-o2-tdz" id="lfJ-Wm-Odr"/>
@@ -191,10 +217,10 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="NGc-Tw-Hzg" firstAttribute="top" secondItem="Raz-GG-ksy" secondAttribute="bottom" id="4NR-ka-0kM"/>
-                            <constraint firstItem="NGc-Tw-Hzg" firstAttribute="leading" secondItem="dfL-d2-s5v" secondAttribute="leadingMargin" constant="-20" id="7AJ-SG-9Fl"/>
-                            <constraint firstItem="z7u-2O-0gP" firstAttribute="top" secondItem="NGc-Tw-Hzg" secondAttribute="bottom" id="z8Y-Hb-ayy"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="NGc-Tw-Hzg" secondAttribute="trailing" constant="-20" id="zkX-WY-Z3o"/>
+                            <constraint firstItem="z7u-2O-0gP" firstAttribute="top" secondItem="NGc-Tw-Hzg" secondAttribute="bottom" id="Cei-zw-gi1"/>
+                            <constraint firstItem="NGc-Tw-Hzg" firstAttribute="leading" secondItem="dfL-d2-s5v" secondAttribute="leadingMargin" constant="-20" id="YRy-ea-LtP"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="NGc-Tw-Hzg" secondAttribute="trailing" constant="-20" id="mrx-S9-Sxn"/>
+                            <constraint firstItem="NGc-Tw-Hzg" firstAttribute="top" secondItem="dfL-d2-s5v" secondAttribute="topMargin" id="sLN-q5-VR8"/>
                         </constraints>
                     </view>
                     <connections>
@@ -218,32 +244,77 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8MZ-a9-4cA">
-                                <rect key="frame" x="0.0" y="64" width="600" height="200"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="mpD-yw-oiN">
+                                <rect key="frame" x="30" y="94" width="540" height="452"/>
+                                <subviews>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="POG-my-vcW">
+                                        <rect key="frame" x="0.0" y="0.0" width="540" height="250"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="200" id="lF3-sJ-B2a"/>
+                                            <constraint firstAttribute="height" constant="250" id="puX-ds-H12"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="lF3-sJ-B2a"/>
+                                            </mask>
+                                        </variation>
+                                    </textView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="top" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="xdX-zp-ivB">
+                                        <rect key="frame" x="0.0" y="270" width="540" height="182"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="34r-DK-29g" customClass="BorderedButton" customModule="VirtualTourist" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="0.0" width="260" height="30"/>
+                                                <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                <state key="normal" title="Cancel">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="cancelBtnTapped:" destination="XI6-OY-X4M" eventType="touchUpInside" id="KpX-nC-3jI"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vye-mM-Wnx" customClass="BorderedButton" customModule="VirtualTourist" customModuleProvider="target">
+                                                <rect key="frame" x="280" y="0.0" width="260" height="30"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                <state key="normal" title="Save"/>
+                                                <connections>
+                                                    <action selector="saveBtnTapped:" destination="XI6-OY-X4M" eventType="touchUpInside" id="ug1-kf-TSX"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="200" id="xRW-fy-Lq5"/>
+                                    <constraint firstAttribute="bottom" secondItem="xdX-zp-ivB" secondAttribute="bottom" id="Tdz-je-dY3"/>
+                                    <constraint firstItem="xdX-zp-ivB" firstAttribute="leading" secondItem="mpD-yw-oiN" secondAttribute="leading" id="ea7-lO-RFc"/>
+                                    <constraint firstItem="xdX-zp-ivB" firstAttribute="top" secondItem="POG-my-vcW" secondAttribute="bottom" constant="20" id="gIk-0m-JWP"/>
+                                    <constraint firstAttribute="trailing" secondItem="xdX-zp-ivB" secondAttribute="trailing" id="hNi-Oa-AA2"/>
                                 </constraints>
-                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L8K-Xg-Z0R" customClass="BorderedButton" customModule="VirtualTourist" customModuleProvider="target">
-                                <rect key="frame" x="479" y="272" width="34" height="30"/>
-                                <state key="normal" title="Save"/>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4ta-qB-aiQ" customClass="BorderedButton" customModule="VirtualTourist" customModuleProvider="target">
-                                <rect key="frame" x="72" y="272" width="48" height="30"/>
-                                <state key="normal" title="Cancel"/>
-                            </button>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="8MZ-a9-4cA" secondAttribute="trailing" constant="-20" id="KJW-qu-XId"/>
-                            <constraint firstItem="8MZ-a9-4cA" firstAttribute="leading" secondItem="cbr-iW-KE9" secondAttribute="leadingMargin" constant="-20" id="bEj-b2-6sG"/>
-                            <constraint firstItem="8MZ-a9-4cA" firstAttribute="top" secondItem="uhd-1P-c89" secondAttribute="bottom" id="hyv-9Q-zUx"/>
+                            <constraint firstItem="mpD-yw-oiN" firstAttribute="leading" secondItem="cbr-iW-KE9" secondAttribute="leadingMargin" constant="10" id="5PL-Fu-AWa"/>
+                            <constraint firstItem="mpD-yw-oiN" firstAttribute="centerX" secondItem="cbr-iW-KE9" secondAttribute="centerX" id="6DG-wR-fWi"/>
+                            <constraint firstItem="7rz-LI-8Q0" firstAttribute="top" secondItem="mpD-yw-oiN" secondAttribute="bottom" constant="10" id="84P-Hw-GcM"/>
+                            <constraint firstItem="mpD-yw-oiN" firstAttribute="top" secondItem="uhd-1P-c89" secondAttribute="bottom" constant="30" id="89l-Ax-S6h"/>
+                            <constraint firstItem="mpD-yw-oiN" firstAttribute="leading" secondItem="cbr-iW-KE9" secondAttribute="leadingMargin" constant="10" id="bYF-Lc-mG6"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="mpD-yw-oiN" secondAttribute="trailing" constant="10" id="gnG-1R-aDP"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="bYF-Lc-mG6"/>
+                                <exclude reference="gnG-1R-aDP"/>
+                            </mask>
+                        </variation>
                     </view>
+                    <connections>
+                        <outlet property="cancelButton" destination="34r-DK-29g" id="gon-cb-F6p"/>
+                        <outlet property="reportTextView" destination="POG-my-vcW" id="3nv-6P-ckX"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Szw-2u-Pu0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
